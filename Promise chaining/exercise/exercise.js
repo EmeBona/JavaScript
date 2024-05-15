@@ -1,30 +1,35 @@
-const isLogged = true;
+const isLogged = true; 
 
-let firstPromise = new Promise ((resolve, reject)=>{
-    if(isLogged){
-        console.log("User is logged");
-        const randomNumber = Math.random();
-        console.log(randomNumber);
-        const randomNumberFixed = randomNumber.toFixed;
-        resolve(randomNumberFixed)
-    }else{
-        reject("This number is not bigger than 0.5")
+function checkLoggedIn(isLogged) {
+  return new Promise((resolve, reject) => {
+    if (isLogged) {
+      resolve(Math.random().toFixed(2)); 
+    } else {
+      reject('User is not logged in');
     }
-})
-
-const secondPromise = (number) => {
-    return new Promise ((resolve, reject) => {
-        if (number > 0.5){
-            console.log("The number is greater than 0.5");
-            resolve({name: "John", age: 24});
-        }else{
-            console.log("Number is smaller than 0.5");
-            reject("ERROR");
-        }
-    })
+  });
 }
 
-firstPromise
-.then((response) => secondPromise(response))
-.then((result)=>console.log(result))
-.catch((error)=>console.error(error))
+
+function checkRandomNumber(randomNumber) {
+  return new Promise((resolve, reject) => {
+    if (randomNumber > "0.50") { 
+      resolve({ name: "John", age: 24 });
+    } else {
+      reject('Random number is too low');
+    }
+  });
+}
+
+
+checkLoggedIn(isLogged)
+  .then((randomNumber) => {
+    console.log('Random number:', randomNumber);
+    return checkRandomNumber(randomNumber);
+  })
+  .then((finalObject) => {
+    console.log(finalObject); 
+  })
+  .catch((error) => {
+    console.error(error);
+  })
